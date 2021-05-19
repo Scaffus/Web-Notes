@@ -188,11 +188,13 @@ def edit_note(user_name, note_id):
         note = Note.query.get_or_404(note_id)
 
         if note.useruuid != user_uuid:
-            return 'Got an error :/'
+            flash('Error in the request, try to refresh the page.', category='error')
         else:
 
             note.title   = title
             note.content = content
+
+            flash('Note \"' + note.title + '\" edited successfuly, see it at \"My notes\"', category='success')
 
             db.session.commit()
         
@@ -217,6 +219,8 @@ def delete_note(user_name, note_id):
 
         db.session.delete(note)
         db.session.commit()
+
+        flash('Note \"' + note.title + '\" deleted', category='success')
 
     return redirect('/notes?uuid=' + user_uuid)
 

@@ -26,44 +26,31 @@
         {% endif %}
     </div>
 
+    <div class="container">
+        <div class="flashs">
+            {% with flashs = get_flashed_messages(with_categories=true) %}
+
+            {% if flashs %}
+
+            {% for category, flash in flashs %}
+
+            <div class="alert alert-{{ category }}">
+                {{ flash }}
+            </div>
+
+            {% endfor %}
+
+            {% endif %}
+
+            {% endwith %}
+        </div>
+    </div>
+
     {% block main %}
     {% endblock %}
 
 
-    {% with flashs = get_flashed_messages(with_categories=true) %}
 
-    {% if flashs %}
-
-    {% for category, flash in flashs %}
-
-    {% if category == 'error' %}
-
-    <p id="error" class="flash_msg">{{ flash }}
-        <button type="button" class="flash_message" style="margin-left: 1em;" aria-label="Fermer"
-            onclick="closeFlashMesage()">×</button>
-    </p>
-
-    {% elif category == 'success' %}
-
-    <p id="success" class="flash_msg">{{ flash }}
-        <button type="button" class="flash_message" style="margin-left: 1em;" aria-label="Fermer"
-            onclick="closeFlashMesage()">×</button>
-    </p>
-
-    {% else %}
-
-    <p id="else" class="flash_msg">{{ flash }}
-        <button type="button" class="flash_message" style="margin-left: 1em;" aria-label="Fermer"
-            onclick="closeFlashMesage()">×</button>
-    </p>
-
-    {% endif %}
-
-    {% endfor %}
-
-    {% endif %}
-
-    {% endwith %}
 
 </body>
 
