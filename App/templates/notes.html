@@ -1,14 +1,22 @@
 {% extends 'base.html' %}
 
 {% block head %}
+<title>Notes - My Notes</title>
 {% endblock %}
-
 
 {% block main %}
 <main>
-
-    {% for note in notes %}
-    <div class="container mt-5">
+    <div class="container">
+        {% for note in notes %}
+        <div class="card shadow-sm p-3 mb-5 bg-body rounded">
+            <div class="card-body">
+                <h5 class="card-title">{{ note.title }}</h5>
+                <p class="card-text">{{ note.content }}</p>
+                <a href="/notes/{{ user.username }}/edit/{{ note.id }}?uuid={{ user.uuid }}">Edit</a>
+                <a href="/notes/{{ user.username }}/delete/{{ note.id }}?uuid={{ user.uuid }}">Delete</a>
+            </div>
+        </div>
+        <!-- <div class="container mt-5">
         <div class="card mb-4 shadow-sm border border-1">
             <div class="card" style="width: 18rem;">
                 <div class="card-body">
@@ -19,8 +27,8 @@
                 </div>
             </div>
         </div>
+    </div> -->
+        {% endfor %}
     </div>
-    {% endfor %}
-
 </main>
 {% endblock %}

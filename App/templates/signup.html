@@ -1,18 +1,39 @@
 {% extends 'base.html' %}
 
 {% block head %}
+<title>Notes - Sign Up</title>
 {% endblock %}
 
 {% block main %}
 
-<main class="sign_form">
-    <form action="/signup" method="POST">
-        <input type="text" name="name" placeholder="Name">
-        <input type="mail" name="mail" placeholder="Mail">
-        <input type="password" name="password" placeholder="Password">
-        <input type="submit" value="Sign Up">
+<main>
+    <div class="container">
+        <form class="px-4 py-3" action="/signup" method="POST">
+            <div class="mb-3">
+                <label for="name" class="form-label">Name</label>
+                <input type="text" name="name" class="form-control" id="name" placeholder="John">
+            </div>
+            <div class="mb-3">
+                <label for="mail" class="form-label">Email address</label>
+                <input type="email" name="mail" class="form-control" id="mail" placeholder="email@example.com">
+            </div>
+            <div class="mb-3">
+                <label for="password" class="form-label">Password</label>
+                <input type="password" name="password" class="form-control" id="password" placeholder="Password">
+            </div>
+            <!-- <div class="mb-3">
+            <div class="form-check">
+              <input type="checkbox" class="form-check-input" id="dropdownCheck">
+              <label class="form-check-label" for="dropdownCheck">
+                Remember me
+              </label>
+            </div>
+          </div> -->
+            <button type="submit" class="btn btn-primary">Sign up</button>
+        </form>
+        <div class="dropdown-divider"></div>
         Already have an account ? <a href="/login">Sign In</a>
-    </form>
+    </div>
 </main>
 
 {% endblock %}

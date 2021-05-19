@@ -9,14 +9,14 @@
 
 <main>
     <div class="container">
-        <form class="px-4 py-3" action="/new" method="POST">
+        <form class="px-4 py-3" action="/notes/{{ user.username }}/edit/{{ note.id }}?uuid={{ user.uuid }}" method="POST">
           <div class="mb-3">
             <label for="title" class="form-label">Title</label>
-            <input type="text" name="title" class="form-control" id="title" placeholder="My super note !">
+            <input type="text" name="title" class="form-control" id="title" placeholder="My super note !" value="{{ note.title }}">
           </div>
           <div class="mb-3">
             <label for="content" class="form-label">Content</label>
-            <textarea class="form-control" name="content" id="content" cols="30" rows="10" placeholder="My super duper content !"></textarea>
+            <textarea class="form-control" name="content" id="content" cols="30" rows="10" placeholder="My super duper content !">{{ note.content }}</textarea>
           </div>
           <!-- <div class="mb-3">
             <div class="form-check">
@@ -26,7 +26,7 @@
               </label>
             </div>
           </div> -->
-          <button type="submit" class="btn btn-primary">Create</button>
+          <button type="submit" class="btn btn-primary">Edit</button>
         </form>
         <div class="dropdown-divider"></div>
         Want to see your notes ? <a href="/notes">My notes</a>

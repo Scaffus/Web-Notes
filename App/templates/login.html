@@ -1,17 +1,32 @@
 {% extends 'base.html' %}
 
 {% block head %}
+<title>Notes - Sign In</title>
 {% endblock %}
 
 {% block main %}
 
-<main class="sign_form">
-    <form action="/login" method="POST">
-        <input type="mail" name="mail" placeholder="Mail">
-        <input type="password" name="password" placeholder="Password">
-        <input type="submit" value="Sign In">
-        Already have an account ? <a href="/signup">Sign Up</a>
-    </form>
+<main>
+    <div class="container">
+        <form class="px-4 py-3" action="/notes/{{ user.username }}/edit/{{ note.id }}" method="POST">
+          <div class="mb-3">
+            <label for="title" class="form-label">Title</label>
+            <input type="text" name="mail" class="form-control" id="title" value="{{ note.title }}">
+          </div>
+          <div class="mb-3">
+            <label for="content" class="form-label">Password</label>
+            <textarea name="content" class="form-control" id="content" cols="30" rows="10">{{ note.content }}</textarea>
+          </div>
+          <!-- <div class="mb-3">
+            <div class="form-check">
+              <input type="checkbox" class="form-check-input" id="dropdownCheck">
+              <label class="form-check-label" for="dropdownCheck">
+                Remember me
+              </label>
+            </div>
+          </div> -->
+          <button type="submit" class="btn btn-primary">Edit</button>
+        </form>
 </main>
 
 {% endblock %}

@@ -1,4 +1,6 @@
+from re import X
 from flask import Flask, redirect, url_for, render_template, flash, request
+import flask
 from flask_login import login_manager, login_user, login_required, logout_user, current_user, LoginManager, UserMixin
 from flask_sqlalchemy import SQLAlchemy
 from werkzeug.security import check_password_hash, generate_password_hash
@@ -142,9 +144,9 @@ def new_note():
         content = request.form['content']
         useruuid  = current_user.uuid
         
-        if not title or len(title) < 2:
+        if len(title) < 2:
             flash('The title must be longer than 2 characters', category='error')
-        elif not content or len(content) < 2:
+        elif len(content) < 2:
             flash('The content must be longer than 2 characters', category='error')
             
         else:
@@ -152,6 +154,8 @@ def new_note():
             
             db.session.add(new_note)
             db.session.commit()
+
+            flash('Note created, see it at \"My notes\".', category='success')
             
     return render_template('newNote.html', user=current_user)
 
@@ -164,6 +168,57 @@ def notes():
     notes = Note.query.filter_by(useruuid=useruuid)
     
     return render_template('notes.html', user=current_user, notes=notes) 
+
+
+@app.route('/notes/<string:user_name>/edit/<int:note_id>', methods=['GET', 'POST'])
+def edit_note(user_name, note_id):
+
+    user_uuid = request.args.get('uuid')
+
+    if request.method == 'POST':
+
+        title   = request.form['title']
+        content = request.form['content']
+
+        if len(title) < 2:
+            flash('The title must be longer than 2 characters', category='error')
+        elif len(content) < 2:
+            flash('The content must be longer than 2 characters', category='error')
+            
+        note = Note.query.get_or_404(note_id)
+
+        if note.useruuid != user_uuid:
+            return 'Got an error :/'
+        else:
+
+            note.title   = title
+            note.content = content
+
+            db.session.commit()
+        
+    note = Note.query.get_or_404(note_id)
+
+    if note.useruuid != user_uuid:
+        return 'Got an error :/'
+    else:
+        return render_template('editNote.html', user=current_user, note=note)
+
+
+@app.route('/notes/<string:user_name>/delete/<int:note_id>')
+def delete_note(user_name, note_id):
+
+    user_uuid = request.args.get('uuid')
+
+    if user_uuid != current_user.uuid:
+        return 'Got an error :/ Wrong uuid'
+
+    else:
+        note = Note.query.get_or_404(note_id)
+
+        db.session.delete(note)
+        db.session.commit()
+
+    return redirect('/notes?uuid=' + user_uuid)
 
 if __name__ == '__main__':
     db.create_all()
