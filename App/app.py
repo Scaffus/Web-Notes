@@ -23,9 +23,10 @@ def load_user(mail):
     return User.query.get(mail)
 
 class Note(db.Model):
-    id       = db.Column(db.Integer, primary_key=True)
-    content  = db.Column(db.String(2000))
-    title    = db.Column(db.String(50))
+    id         = db.Column(db.Integer, primary_key=True)
+    content    = db.Column(db.String(2000))
+    title      = db.Column(db.String(50))
+    useruuid   = db.Column(db.String(36))
 
 class User(db.Model, UserMixin):
     id       = db.Column(db.Integer, primary_key=True)
@@ -46,11 +47,11 @@ class User(db.Model, UserMixin):
 @app.route('/')
 def index():
     
-    return render_template('index.html')
+    return render_template('index.html', user=current_user)
 
 
-@app.route('/signin', methods=['GET', 'POST'])
-def signin():
+@app.route('/login', methods=['GET', 'POST'])
+def login():
 
     if request.method == 'POST':
 
@@ -71,7 +72,7 @@ def signin():
         else:
             flash('L\'addresse email n\'existe pas.')
 
-    return render_template('signin.html', user=current_user)
+    return render_template('login.html', user=current_user)
 
 
 @app.route('/signup', methods=['GET', 'POST'])
@@ -81,10 +82,9 @@ def signup():
 
         username = request.form['name']
         password = request.form['password']
-        mail     = request.form['mail']
-        uuid     = uuid.uuid4()
+        mail     = request.form['mail'].lower()
 
-        user = User.query.filter_by(mail=mail.lower()).first()
+        user = User.query.filter_by(mail=mail).first()
 
         if user:
             flash('L\'addresse email existe déjà.', category='error')
@@ -103,7 +103,7 @@ def signup():
             return redirect(url_for('signup'))
 
         else:
-            newUser = User(username=username.lower(), mail=mail.lower(), password=generate_password_hash(password, method='sha256'), uuid=uuid)
+            newUser = User(username=username.lower(), mail=mail.lower(), password=generate_password_hash(password, method='sha256'), uuid=str(uuid.uuid4()))
             
             db.session.add(newUser)
             db.session.commit()
@@ -112,7 +112,7 @@ def signup():
 
             flash('Compte créé avec succès!', category='success')
 
-        return redirect(url_for('signin'))
+        return redirect(url_for('login'))
     return render_template('signup.html', user=current_user)
 
 
@@ -122,7 +122,7 @@ def signout():
 
     logout_user()
 
-    return redirect(url_for('signin'))
+    return redirect(url_for('login'))
 
 
 @app.route('/account')
@@ -140,21 +140,30 @@ def new_note():
         
         title   = request.form['title']
         content = request.form['content']
+        useruuid  = current_user.uuid
         
-        if not title or title.len() < 2:
+        if not title or len(title) < 2:
             flash('The title must be longer than 2 characters', category='error')
-        elif not content or content < 2:
+        elif not content or len(content) < 2:
             flash('The content must be longer than 2 characters', category='error')
+            
         else:
+            new_note = Note(title=title, content=content, useruuid=useruuid)
             
-            new_note = Note(title=title, content=content)
+            db.session.add(new_note)
+            db.session.commit()
             
+    return render_template('newNote.html', user=current_user)
 
 @app.route('/notes')
 @login_required
 def notes():
     
-    notes = Note.query.get()
+    useruuid = request.args.get('uuid')
+    
+    notes = Note.query.filter_by(useruuid=useruuid)
+    
+    return render_template('notes.html', user=current_user, notes=notes) 
 
 if __name__ == '__main__':
     db.create_all()

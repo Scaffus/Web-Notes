@@ -16,7 +16,7 @@
     <div class="navbar">
         <a href="/new">Create new</a>
         {% if user.is_authenticated %}
-        <a href="/notes">My notes</a>
+        <a href="/notes?uuid={{ user.uuid }}">My notes</a>
         <a href="/account">Account</a>
         <a href="/signout">Sign Out</a>
         {% else %}
@@ -27,6 +27,42 @@
 
     {% block main %}
     {% endblock %}
+
+
+    {% with flashs = get_flashed_messages(with_categories=true) %}
+
+    {% if flashs %}
+
+    {% for category, flash in flashs %}
+
+    {% if category == 'error' %}
+
+    <p id="error" class="flash_msg">{{ flash }}
+        <button type="button" class="flash_message" style="margin-left: 1em;" aria-label="Fermer"
+            onclick="closeFlashMesage()">×</button>
+    </p>
+
+    {% elif category == 'success' %}
+
+    <p id="success" class="flash_msg">{{ flash }}
+        <button type="button" class="flash_message" style="margin-left: 1em;" aria-label="Fermer"
+            onclick="closeFlashMesage()">×</button>
+    </p>
+
+    {% else %}
+
+    <p id="else" class="flash_msg">{{ flash }}
+        <button type="button" class="flash_message" style="margin-left: 1em;" aria-label="Fermer"
+            onclick="closeFlashMesage()">×</button>
+    </p>
+
+    {% endif %}
+
+    {% endfor %}
+
+    {% endif %}
+
+    {% endwith %}
 
 </body>
 
