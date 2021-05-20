@@ -7,23 +7,39 @@
 
 {% block main %}
 
-<p class="category">Account informations</p>
-<div class="dashb_main">
-    <div class="dashb_resources">
-        <label class="dashb_info" for="username">Username</label>
-        <input type="text" disabled class="dashb_info" id="username" placeholder="{{ user.username }}">
-    </div>
-    <div class="dashb_resources">
-        <label class="dashb_info" for="mail">Mail</label>
-        <input type="mail" disabled class="dashb_info" id="mail" placeholder="{{ user.mail }}">
-    </div>
-    <div class="dashb_resources">
-        <label class="dashb_info" for="togleable">UUID</label>
-        <div style="display: block;">
-            <input style="justify-content: center; align-items: center;" type="password" disabled id="togleable " value="{{ user.uuid }}">
-            <input style="justify-content: center; align-items: center;" type="checkbox" onclick="togglePasswordVisibility()">
+<main>
+    <div class="container">
+        <div class="px-4 py-3">
+            <div class="mb-3">
+                <label for="name" class="form-label">Name</label>
+                <input type="text" name="name" class="form-control" id="name" placeholder="Username" value="{{ user.username }}" disabled>
+            </div>
+            <div class="mb-3">
+                <label for="mail" class="form-label">Email address</label>
+                <input type="email" name="mail" class="form-control" id="mail" placeholder="Mail" value="{{ user.mail }}" disabled>
+            </div>
+            <div class="mb-3">
+                <label for="togleable" class="form-label">UUID</label>
+                <input type="password" class="form-control" id="togleable" placeholder="Uuid" value="{{ user.uuid }}" disabled>
+                <label for="checktoggle">See my uuid</label><input type="checkbox" id="checktoggle" onclick="togglePasswordVisibility()">
+            </div>
+            <div class="mb-3">
+                <label for="password" class="form-label">Password</label>
+                <input type="password" name="password" class="form-control" id="password" placeholder="••••••••" disabled>
+            </div>
+            <!-- <div class="mb-3">
+            <div class="form-check">
+              <input type="checkbox" class="form-check-input" id="dropdownCheck">
+              <label class="form-check-label" for="dropdownCheck">
+                Remember me
+              </label>
+            </div>
+          </div> -->
+            <div class="dropdown-divider"></div>
+            Want to logout ? <a href="/login">Sign Out</a>
         </div>
     </div>
-</div>
+</main>
+
 
 {% endblock %}
