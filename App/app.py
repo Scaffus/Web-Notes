@@ -1,7 +1,5 @@
-from re import X
 from flask import Flask, redirect, url_for, render_template, flash, request
-import flask
-from flask_login import login_manager, login_user, login_required, logout_user, current_user, LoginManager, UserMixin
+from flask_login import login_user, login_required, logout_user, current_user, LoginManager, UserMixin
 from flask_sqlalchemy import SQLAlchemy
 from werkzeug.security import check_password_hash, generate_password_hash
 import uuid
